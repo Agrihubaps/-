@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --bg: #0e2d1f; --fg: #f3efe6; }
+html, body { background: var(--bg); color: var(--fg); }
+.container-xxl { @apply max-w-7xl mx-auto px-4; }
+.btn-gold { @apply inline-flex items-center justify-center rounded-2xl px-6 py-3 font-medium shadow-glow transition hover:opacity-90; background: linear-gradient(135deg,#d7b869,#af8a31); color:#132018; }
+.card { @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-6; }
+h1 { @apply text-4xl md:text-6xl font-bold; } h2 { @apply text-3xl md:text-4xl font-semibold; } h3 { @apply text-2xl font-semibold; }
+
+.bg-ambient {
+  position: relative;
+}
+.bg-ambient::before, .bg-ambient::after {
+  content: ""; position: absolute; inset: -20%; z-index: -1; filter: blur(60px); opacity: .35; animation: float 16s ease-in-out infinite;
+  background: radial-gradient(40% 40% at 20% 30%, #c9a44955 0%, transparent 60%),
+              radial-gradient(35% 35% at 80% 70%, #58a37344 0%, transparent 60%);
+}
+.bg-ambient::after { animation-duration: 22s; animation-direction: reverse; }
+@keyframes float { 0% {transform: translateY(0) scale(1);} 50% {transform: translateY(-12px) scale(1.02);} 100% {transform: translateY(0) scale(1);} }
