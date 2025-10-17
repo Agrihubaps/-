@@ -81,16 +81,22 @@ export default function Page(){
   const { lang } = useLocale()
   const t = copy[lang]
 
-  function handleContact(e: React.FormEvent<HTMLFormElement>){
-    const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT
-    if (!endpoint) return
-    e.preventDefault()
-    const form = e.currentTarget
-    const data = new FormData(form)
-    fetch(endpoint as string, { method: 'POST', body: data })
-      .then(()=>{ alert(t.alert_ok); form.reset() })
-      .catch(()=> alert(t.alert_err))
+  function handleContact(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault(); // всегда останавливаем стандартную отправку
+  const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT
+  const form = e.currentTarget
+  const data = new FormData(form)
+
+  if (!endpoint) {
+    alert('Formen er ikke forbundet endnu. Tilføj NEXT_PUBLIC_CONTACT_ENDPOINT i Vercel → Settings → Environment Variables.')
+    return
   }
+
+  fetch(endpoint as string, { method: 'POST', body: data })
+    .then(() => { alert('Tak! Vi kontakter dig snart.'); form.reset() })
+    .catch(() => alert('Der opstod en fejl. Prøv igen senere.'))
+}
+
 
   return (
     <main>
