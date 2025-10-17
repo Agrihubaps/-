@@ -8,30 +8,67 @@ const dict = {
   en: { problem: 'Challenge', solution: 'Solution', features: 'Features', market: 'Market', team: 'Team', contact: 'Contact', mission: 'Mission', menu: 'Menu' }
 }
 
+// Универсальная ссылка с мягким скроллом к якорю (#id)
+function Anchor({
+  href,
+  className,
+  children,
+  onDone,
+}: {
+  href: string
+  className?: string
+  children: React.ReactNode
+  onDone?: () => void
+}) {
+  const isHash = href.startsWith('#')
+  const id = isHash ? href.slice(1) : null
+
+  function handleClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (id) {
+      e.preventDefault()
+      const target = document.getElementById(id)
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        // Обновим URL-хеш без перезагрузки
+        history.replaceState(null, '', href)
+      }
+      onDone?.()
+    }
+  }
+
+  return (
+    <a href={href} className={className} onClick={handleClick}>
+      {children}
+    </a>
+  )
+}
+
 export default function Header(){
   const { lang, setLang } = useLocale()
   const t = dict[lang]
   const [open, setOpen] = useState(false)
 
+  const closeMenu = () => setOpen(false)
+
   const NavLinks = () => (
     <>
-      <a href="#problem">{t.problem}</a>
-      <a href="#solution">{t.solution}</a>
-      {/* ВАЖНО: "Funktioner/Features" теперь ведёт на #solution, потому что отдельной #features нет */}
-      <a href="#solution">{t.features}</a>
-      <a href="#mission">{t.mission}</a>
-      <a href="#market">{t.market}</a>
-      <a href="#team">{t.team}</a>
-      <a href="#contact" className="btn-gold">{t.contact}</a>
+      <Anchor href="#problem" onDone={closeMenu}>{t.problem}</Anchor>
+      <Anchor href="#solution" onDone={closeMenu}>{t.solution}</Anchor>
+      {/* "Funktioner/Features" ведём на тот же блок Løsning */}
+      <Anchor href="#solution" onDone={closeMenu}>{t.features}</Anchor>
+      <Anchor href="#mission" onDone={closeMenu}>{t.mission}</Anchor>
+      <Anchor href="#market" onDone={closeMenu}>{t.market}</Anchor>
+      <Anchor href="#team" onDone={closeMenu}>{t.team}</Anchor>
+      <Anchor href="#contact" className="btn-gold" onDone={closeMenu}>{t.contact}</Anchor>
       <div className="flex items-center gap-2 ml-4">
-        <button onClick={()=>setLang('da')} aria-label="Dansk" className={`px-3 py-1 rounded-xl ${lang==='da'?'bg-white text-black':'bg-white/10'}`}>DA</button>
-        <button onClick={()=>setLang('en')} aria-label="English" className={`px-3 py-1 rounded-xl ${lang==='en'?'bg-white text-black':'bg-white/10'}`}>EN</button>
+        <button onClick={()=>{ setLang('da'); closeMenu() }} aria-label="Dansk" className={`px-3 py-1 rounded-xl ${lang==='da'?'bg-white text-black':'bg-white/10'}`}>DA</button>
+        <button onClick={()=>{ setLang('en'); closeMenu() }} aria-label="English" className={`px-3 py-1 rounded-xl ${lang==='en'?'bg-white text-black':'bg-white/10'}`}>EN</button>
       </div>
     </>
   )
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-greenDark/80 backdrop-blur">
+    <header className="relative sticky top-0 z-50 border-b border-white/10 bg-greenDark/80 backdrop-blur">
       <div className="container-xxl flex items-center justify-between py-3">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="AgriHub" width={40} height={40} className="rounded" />
