@@ -17,7 +17,8 @@ export default function Header(){
     <>
       <a href="#problem">{t.problem}</a>
       <a href="#solution">{t.solution}</a>
-      <a href="#features">{t.features}</a>
+      {/* ВАЖНО: "Funktioner/Features" теперь ведёт на #solution, потому что отдельной #features нет */}
+      <a href="#solution">{t.features}</a>
       <a href="#mission">{t.mission}</a>
       <a href="#market">{t.market}</a>
       <a href="#team">{t.team}</a>
