@@ -12,7 +12,7 @@ export default function Section({
   children: ReactNode
 }) {
   return (
-    <section id={id} className="container-xxl py-16">
+    <section id={id} className="container-xxl py-16 scroll-mt-24 md:scroll-mt-28">
       {title && (
         <div className="mb-10">
           <h2 className="mb-2">{title}</h2>
